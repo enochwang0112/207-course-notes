@@ -69,9 +69,9 @@ public class MyHashing {
     char[] arr = value.toCharArray();
     int total = 0;
 
-    for(int i = 0; i < arr.length; i++) {
-      total += arr[i];
-    }
+      for (char c : arr) {
+          total += c;
+      }
     return total;
   }
 }

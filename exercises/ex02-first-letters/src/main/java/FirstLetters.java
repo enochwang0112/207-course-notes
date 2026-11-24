@@ -28,7 +28,7 @@ public class FirstLetters {
         StringBuilder result = new StringBuilder();
         String[] wordArr = words.split(" ");
 
-        for(String word : wordArr) {
+        for (String word : wordArr) {
             result.append(word.charAt(0));
         }
         return result.toString();

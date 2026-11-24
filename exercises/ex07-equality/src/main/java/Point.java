@@ -58,7 +58,7 @@ public class Point {
   @Override
   public boolean equals(Object o) {
 
-    if(!(o instanceof Point)) {
+    if (!(o instanceof Point)) {
       return false;
     }
 
