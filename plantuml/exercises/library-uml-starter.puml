@@ -27,19 +27,82 @@ abstract class Item {
   + getCatalogueNumber() : String
 }
 
-' TODO: add boxes for Book and DVD. What differs between them — a whole class,
-'       or just the value of a loan-period field?
+interface Borrowable {
+  + getLoanPeriodDays() : int
+  + isOnLoan() : boolean
+  + borrow(member : Member) : Loan
+  + placeHold(member : Member) : Hold
+}
 
-' TODO: reference-only items cannot be borrowed at all. Decide how to say that
-'       in the diagram: a subclass, or an interface (e.g. "Borrowable") that
-'       only some items realize?
+class LoanableItem {
+  - loanPeriodDays : int
+  - currentLoan : Loan
+  - holds : List<Hold>
+  + getLoanPeriodDays() : int
+  + isOnLoan() : boolean
+  + borrow(member : Member) : Loan
+  + placeHold(member : Member) : Hold
+}
 
-' TODO: add Member and Librarian. What do they have in common? Add the common
-'       supertype if you think one is warranted.
+class Book {
+  + Book(title : String, catalogueNumber : String)
+}
 
-' TODO: add whatever represents a hold, and connect it to the classes that need
-'       to know about it.
+class DVD {
+  + DVD(title : String, catalogueNumber : String)
+}
 
-' TODO: add the arrows between all of your types.
+class ReferenceItem
 
+class Loan {
+  - dueDate : LocalDate
+  + getMember() : Member
+  + getItem() : LoanableItem
+  + isOverdue() : boolean
+}
+
+class Hold {
+  - datePlaced : LocalDate
+  + getMember() : Member
+  + getItem() : LoanableItem
+}
+
+abstract class User {
+  - name : String
+}
+
+class Member {
+  - memberNumber : String
+  - lateFee : double
+  + logIn(memberNumber : String) : boolean
+  + placeHold(item : Borrowable) : Hold
+  + getLateFee() : double
+  + clearLateFee() : void
+}
+
+class Librarian {
+  + addItem(catalogue : Catalogue, item : Item) : void
+  + waiveLateFee(member : Member) : void
+}
+
+class Catalogue {
+  - items : Map<String, Item>
+  + addItem(item : Item) : void
+  + findItem(catalogueNumber : String) : Item
+}
+
+Item <|-- LoanableItem
+Item <|-- ReferenceItem
+Borrowable <|.. LoanableItem
+LoanableItem <|-- Book
+LoanableItem <|-- DVD
+
+User <|-- Member
+User <|-- Librarian
+
+Catalogue "1" o-- "*" Item
+LoanableItem "1" -- "0..1" Loan
+LoanableItem "1" -- "*" Hold
+Loan "*" --> "1" Member
+Hold "*" --> "1" Member
 @enduml
